@@ -31,8 +31,4 @@ public class ItemsConverter {
         return modelMapper.map(itemsDTO,Items.class);
     }
 
-    public List<Items> dtoToEntity(List<ItemsDTO> itemsDTOS)
-    {
-        return itemsDTOS.stream().map(this::dtoToEntity).collect(Collectors.toList());
-    }
 }

@@ -4,7 +4,6 @@ package com.shop.supermarket.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class Users {
 
@@ -51,7 +49,6 @@ public class Users {
             joinColumns = @JoinColumn(name = "username"),
             inverseJoinColumns = @JoinColumn(name = "item_id")
     )
-    @ToString.Exclude
     private List<Items> items;
 
 
@@ -62,7 +59,6 @@ public class Users {
             joinColumns = @JoinColumn(name = "username"),
             inverseJoinColumns = @JoinColumn(name = "authority")
     )
-    @ToString.Exclude
     private List<Roles> roles;
 
     public void addRole(Roles theRole)

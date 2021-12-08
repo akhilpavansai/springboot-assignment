@@ -2,7 +2,8 @@ package com.shop.supermarket.controller;
 
 
 import com.shop.supermarket.converter.ItemsConverter;
-import com.shop.supermarket.entity.User;
+import com.shop.supermarket.converter.UsersConverter;
+import com.shop.supermarket.dto.UsersDTO;
 import com.shop.supermarket.entity.Users;
 import com.shop.supermarket.service.ItemsService;
 import com.shop.supermarket.service.UsersService;
@@ -28,29 +29,33 @@ public class UsersDataController {
     private ItemsService itemsService;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private ItemsConverter itemsConverter;
 
     @Autowired
-    private ItemsConverter itemsConverter;
+    private UsersConverter usersConverter;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
 
     @GetMapping("/ordersList")
     public String ordersList(Principal loginUser,Model theModel)
     {
         theModel.addAttribute("currentUser",loginUser.getName());
-        theModel.addAttribute("orderedItems",usersService.getOrdersList(loginUser.getName()));
+        theModel.addAttribute("orderedItems",itemsConverter.entityToDto(usersService.getOrdersList(loginUser.getName())));
         return "orders-list";
     }
 
     @GetMapping("/order")
     public String order(Model theModel)
     {
-        theModel.addAttribute("items",itemsService.getAllItemsList());
+        theModel.addAttribute("items",itemsConverter.entityToDto(itemsService.getAllItemsList()));
         return "order-item";
     }
 
     @PostMapping("/orderItem")
-    public ModelAndView orderItem(@RequestParam String itemId, Principal loggedUser, Model theModel)
+    public ModelAndView orderItem(@RequestParam String itemId, Principal loggedUser)
     {
         usersService.addItem(loggedUser.getName(),Integer.parseInt(itemId));
         return new ModelAndView("redirect:/successHandler");
@@ -68,18 +73,14 @@ public class UsersDataController {
     @GetMapping("/updatePage")
     public String updatePage(Model model,Principal currentLoggedUser)
     {
-        User tempUser = new User();
-        Users gettingUser = usersService.findByUsername(currentLoggedUser.getName());
-        tempUser.setEmail(gettingUser.getEmail());
-        tempUser.setPhoneNumber(gettingUser.getPhoneNumber());
-        tempUser.setAddress(gettingUser.getAddress());
+        UsersDTO tempUser = usersConverter.entityToDto(usersService.findByUsername(currentLoggedUser.getName()));
         model.addAttribute("user",tempUser);
         return "update-page";
     }
 
 
     @PostMapping("/saveUser")
-    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,Principal presentUser)
+    public String saveUser(@Valid @ModelAttribute("user") UsersDTO user, BindingResult bindingResult, Model model,Principal presentUser)
     {
         if(bindingResult.hasErrors())
         {
@@ -87,8 +88,9 @@ public class UsersDataController {
             model.addAttribute("user",user);
             return "update-page";
         }
-        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-        usersService.updateData(presentUser.getName(),encodedPassword,user.getEmail(),user.getPhoneNumber(),user.getAddress());
+        Users tempUser = usersConverter.dtoToEntity(user);
+        String encodedPassword = bCryptPasswordEncoder.encode(tempUser.getPassword());
+        usersService.updateData(presentUser.getName(),encodedPassword,tempUser.getEmail(),tempUser.getPhoneNumber(),tempUser.getAddress());
         return "redirect:/successHandler";
     }
 

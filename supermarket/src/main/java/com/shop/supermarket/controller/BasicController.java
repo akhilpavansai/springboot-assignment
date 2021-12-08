@@ -1,5 +1,6 @@
 package com.shop.supermarket.controller;
 
+import com.shop.supermarket.converter.RolesConverter;
 import com.shop.supermarket.converter.UsersConverter;
 import com.shop.supermarket.dto.RolesDTO;
 import com.shop.supermarket.dto.UsersDTO;
@@ -23,6 +24,9 @@ public class BasicController {
 
     @Autowired
     private UsersConverter usersConverter;
+
+    @Autowired
+    private RolesConverter rolesConverter;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -68,7 +72,7 @@ public class BasicController {
         user.setEnabled((short) 1);
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        usersService.save(usersConverter.dtoToEntity(user));
+        usersService.saveUser(usersConverter.dtoToEntity(user));
         model.addAttribute("finalUser",user);
         return "redirect:/loginPage?user=True";
     }
@@ -86,7 +90,7 @@ public class BasicController {
         {
             return "prompt-page";
         }
-        usersService.saveRole(username,role);
+        usersService.saveRole(username,rolesConverter.dtoToEntity(role));
         return "redirect:/loginPage";
     }
 

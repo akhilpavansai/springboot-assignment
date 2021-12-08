@@ -2,8 +2,9 @@ package com.shop.supermarket.controller;
 
 
 import com.shop.supermarket.converter.ItemsConverter;
+import com.shop.supermarket.converter.UsersConverter;
 import com.shop.supermarket.dto.ItemsDTO;
-import com.shop.supermarket.entity.User;
+import com.shop.supermarket.dto.UsersDTO;
 import com.shop.supermarket.entity.Users;
 import com.shop.supermarket.service.ItemsService;
 import com.shop.supermarket.service.UsersService;
@@ -22,33 +23,33 @@ import java.security.Principal;
 @RequestMapping("/staff")
 public class StaffDataController {
 
-
-    public static final ItemsDTO itemsDTO = new ItemsDTO();
+    @Autowired
+    private UsersService usersServiceObject;
 
     @Autowired
-    private UsersService usersService;
+    private ItemsService itemsServiceObject;
 
     @Autowired
-    private ItemsService itemsService;
+    private ItemsConverter itemsConverterObject;
 
     @Autowired
-    private ItemsConverter itemsConverter;
+    private UsersConverter usersConverterObject;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoderObject;
 
     @GetMapping("/stockList")
     public String stockList(Model theModel)
     {
-        theModel.addAttribute("allItems",itemsConverter.entityToDto(itemsService.getAllItemsList()));
+        theModel.addAttribute("allItems", itemsConverterObject.entityToDto(itemsServiceObject.getAllItemsList()));
         return "stock-list";
     }
 
 
     @PostMapping("/deleteItem")
-    public ModelAndView deleteItem(@RequestParam int id,Principal loggedUser)
+    public ModelAndView deleteItem(@RequestParam int id)
     {
-        itemsService.deleteItemById(id);
+        itemsServiceObject.deleteItemById(id);
         return new ModelAndView("redirect:/staff/stockList");
     }
 
@@ -57,19 +58,14 @@ public class StaffDataController {
     @GetMapping("/updateStaffPage")
     public String updatePage(Model model,Principal loggedUser)
     {
-        User tempUser = new User();
-        Users gettingUser = usersService.findByUsername(loggedUser.getName());
-        tempUser.setPassword(gettingUser.getPassword());
-        tempUser.setEmail(gettingUser.getEmail());
-        tempUser.setPhoneNumber(gettingUser.getPhoneNumber());
-        tempUser.setAddress(gettingUser.getAddress());
+        UsersDTO tempUser = usersConverterObject.entityToDto(usersServiceObject.findByUsername(loggedUser.getName()));
         model.addAttribute("user",tempUser);
         return "update-staff-page";
     }
 
 
     @PostMapping("/saveUser")
-    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,Principal loggedUser)
+    public String saveUser(@Valid @ModelAttribute("user") UsersDTO user, BindingResult bindingResult, Model model,Principal loggedUser)
     {
         if(bindingResult.hasErrors())
         {
@@ -77,16 +73,16 @@ public class StaffDataController {
             model.addAttribute("user",user);
             return "update-staff-page";
         }
-        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-        usersService.updateData(loggedUser.getName(),encodedPassword,user.getEmail(),user.getPhoneNumber(),user.getAddress());
+        Users tempUser = usersConverterObject.dtoToEntity(user);
+        String encodedPassword = bCryptPasswordEncoderObject.encode(tempUser.getPassword());
+        usersServiceObject.updateData(loggedUser.getName(),encodedPassword,tempUser.getEmail(),tempUser.getPhoneNumber(),tempUser.getAddress());
         return "redirect:/successHandler";
     }
 
 
     @GetMapping("/addItem")
-    public String addNewItem(Model model)
+    public String addNewItem()
     {
-        model.addAttribute("item",itemsDTO);
         return "item-form";
     }
 
@@ -94,7 +90,7 @@ public class StaffDataController {
     @PostMapping("/saveItem")
     public String saveNewItem(@ModelAttribute("item")ItemsDTO itemsDTO)
     {
-        itemsService.addNewItem(itemsConverter.dtoToEntity(itemsDTO));
+        itemsServiceObject.addNewItem(itemsConverterObject.dtoToEntity(itemsDTO));
         return "redirect:/successHandler";
     }
 

@@ -8,6 +8,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 
@@ -16,11 +18,19 @@ class BasicControllerTest {
 
     private MockMvc mockMvc;
 
+    BasicController basicController;
+
     @org.junit.jupiter.api.BeforeEach
     public void setup()
     {
-        BasicController basicController = new BasicController();
+        basicController = new BasicController();
         mockMvc= MockMvcBuilders.standaloneSetup(basicController).build();
+    }
+
+    @Test
+    void contextLoads()
+    {
+        assertThat(basicController).isNotNull();
     }
 
     @Test

@@ -1,7 +1,8 @@
 package com.shop.supermarket.controller;
 
-import com.shop.supermarket.entity.Roles;
-import com.shop.supermarket.entity.User;
+import com.shop.supermarket.converter.UsersConverter;
+import com.shop.supermarket.dto.RolesDTO;
+import com.shop.supermarket.dto.UsersDTO;
 import com.shop.supermarket.entity.Users;
 import com.shop.supermarket.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -19,6 +20,9 @@ import java.security.Principal;
 public class BasicController {
     @Autowired
     private UsersService usersService;
+
+    @Autowired
+    private UsersConverter usersConverter;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -37,22 +41,22 @@ public class BasicController {
     }
 
     @GetMapping("/access-denied")
-    public String failHandler(Principal loggedUser, Model theModel)
+    public String failHandler()
     {
-        return "access-denied";
+        return "denied";
     }
 
     @GetMapping("/registerPage")
-    public String registerPage(Principal loggedUser, Model theModel)
+    public String registerPage(Model theModel)
     {
         theModel.addAttribute("user",new Users());
         return "register";
     }
 
-    @RequestMapping(path = "/saveNewUser",method = RequestMethod.POST)
-    public String registerPage(@Valid @ModelAttribute("user") Users user, BindingResult bindingResult, Model model, Principal loggedUser)
+    @PostMapping("/saveNewUser")
+    public String registerPage(@Valid @ModelAttribute("user") UsersDTO user, BindingResult bindingResult, Model model, Principal loggedUser)
     {
-        if (usersService.getUser(user.getUsername())!=null)
+        if (usersService.findByUsername(user.getUsername())!=null)
         {
             return "duplicate-user";
         }
@@ -64,7 +68,7 @@ public class BasicController {
         user.setEnabled((short) 1);
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        usersService.registerUser(user);
+        usersService.save(usersConverter.dtoToEntity(user));
         model.addAttribute("finalUser",user);
         return "redirect:/loginPage?user=True";
     }
@@ -72,12 +76,13 @@ public class BasicController {
     @GetMapping("/role")
     public String role()
     {
-        return "role";
+        return "role-page";
     }
-    @RequestMapping(path = "/saveRole",method = RequestMethod.POST)
-    public String saveRole( @RequestParam("authority") Roles role,@RequestParam("username") String username, Model model, Principal loggedUser)
+
+    @PostMapping("/saveRole")
+    public String saveRole(@RequestParam("authority") RolesDTO role, @RequestParam("username") String username, Model model, Principal loggedUser)
     {
-        if(usersService.getUser(username).getRoles().size()>=1)
+        if(!usersService.findByUsername(username).getRoles().isEmpty())
         {
             return "prompt-page";
         }

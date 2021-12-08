@@ -1,6 +1,9 @@
 package com.shop.supermarket.service;
 
-import com.shop.supermarket.entity.Roles;
+import com.shop.supermarket.converter.RolesConverter;
+import com.shop.supermarket.converter.UsersConverter;
+import com.shop.supermarket.dto.RolesDTO;
+import com.shop.supermarket.dto.UsersDTO;
 import com.shop.supermarket.entity.Users;
 import com.shop.supermarket.dao.UsersDAO;
 import com.shop.supermarket.entity.Items;
@@ -14,6 +17,10 @@ public class UsersServiceImpl implements UsersService{
 
     private UsersDAO usersDAO;
 
+
+    @Autowired
+    private RolesConverter rolesConverter;
+
     @Autowired
     public UsersServiceImpl(UsersDAO theUsersDAO)
     {
@@ -22,8 +29,8 @@ public class UsersServiceImpl implements UsersService{
 
 
     @Override
-    public List<Items> getItemsList(String username) {
-        return usersDAO.getItemsList(username);
+    public List<Items> getOrdersList(String username) {
+        return usersDAO.getOrdersList(username);
     }
 
     @Override
@@ -42,17 +49,17 @@ public class UsersServiceImpl implements UsersService{
     }
 
     @Override
-    public void registerUser(Users theUser) {
+    public void save(Users theUser) {
         usersDAO.registerUser(theUser);
     }
 
     @Override
-    public void saveRole(String user, Roles role) {
-        usersDAO.saveRole(user,role);
+    public void saveRole(String user, RolesDTO role) {
+        usersDAO.saveRole(user,rolesConverter.dtoToEntity(role));
     }
 
     @Override
-    public Users getUser(String username) {
+    public Users findByUsername(String username) {
         return usersDAO.getUser(username);
     }
 }

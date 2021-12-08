@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -27,7 +26,7 @@ public class UsersDAOImpl implements UsersDAO {
 
     @Override
     @Transactional
-    public List<Items> getItemsList(String username) {
+    public List<Items> getOrdersList(String username) {
         Session currentSession = entityManager.unwrap(Session.class);
         Users tempUser = currentSession.get(Users.class,username);
         currentSession.close();

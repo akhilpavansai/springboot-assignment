@@ -1,15 +1,21 @@
 package com.shop.supermarket.entity;
 
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class Users {
 
     @Column(name = "id")
@@ -45,6 +51,7 @@ public class Users {
             joinColumns = @JoinColumn(name = "username"),
             inverseJoinColumns = @JoinColumn(name = "item_id")
     )
+    @ToString.Exclude
     private List<Items> items;
 
 
@@ -55,15 +62,8 @@ public class Users {
             joinColumns = @JoinColumn(name = "username"),
             inverseJoinColumns = @JoinColumn(name = "authority")
     )
+    @ToString.Exclude
     private List<Roles> roles;
-
-    public List<Roles> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Roles> roles) {
-        this.roles = roles;
-    }
 
     public void addRole(Roles theRole)
     {
@@ -72,14 +72,6 @@ public class Users {
             roles=new ArrayList<>();
         }
         roles.add(theRole);
-    }
-
-    public List<Items> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Items> items) {
-        this.items = items;
     }
 
     public void addItem(Items theItem)
@@ -91,10 +83,6 @@ public class Users {
         items.add(theItem);
     }
 
-    public Users()
-    {
-
-    }
 
     public Users(String username, String password, String email, String phoneNumber, String address, short enabled) {
         this.username = username;
@@ -105,72 +93,4 @@ public class Users {
         this.enabled = enabled;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public short getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(short enabled) {
-        this.enabled = enabled;
-    }
-
-    @Override
-    public String toString() {
-        return "Users{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", address='" + address + '\'' +
-                ", enabled=" + enabled +
-                '}';
-    }
 }

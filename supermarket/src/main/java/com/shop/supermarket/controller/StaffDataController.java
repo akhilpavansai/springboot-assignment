@@ -1,20 +1,17 @@
 package com.shop.supermarket.controller;
 
 
-
-import com.shop.supermarket.entity.TempData;
+import com.shop.supermarket.converter.ItemsConverter;
+import com.shop.supermarket.dto.ItemsDTO;
 import com.shop.supermarket.entity.User;
 import com.shop.supermarket.entity.Users;
 import com.shop.supermarket.service.ItemsService;
-import com.shop.supermarket.service.StaffService;
 import com.shop.supermarket.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,6 +22,9 @@ import java.security.Principal;
 @RequestMapping("/staff")
 public class StaffDataController {
 
+
+    public static final ItemsDTO itemsDTO = new ItemsDTO();
+
     @Autowired
     private UsersService usersService;
 
@@ -32,16 +32,15 @@ public class StaffDataController {
     private ItemsService itemsService;
 
     @Autowired
-    private StaffService staffService;
+    private ItemsConverter itemsConverter;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/stockList")
-    public String ordersList(Principal loggedUser,Model theModel)
+    public String stockList(Model theModel)
     {
-        theModel.addAttribute("loggedUser",loggedUser.getName());
-        theModel.addAttribute("allItems",itemsService.getAllItemsList());
+        theModel.addAttribute("allItems",itemsConverter.entityToDto(itemsService.getAllItemsList()));
         return "stock-list";
     }
 
@@ -49,7 +48,7 @@ public class StaffDataController {
     @PostMapping("/deleteItem")
     public ModelAndView deleteItem(@RequestParam int id,Principal loggedUser)
     {
-        staffService.deleteItem(id);
+        itemsService.deleteItemById(id);
         return new ModelAndView("redirect:/staff/stockList");
     }
 
@@ -59,25 +58,24 @@ public class StaffDataController {
     public String updatePage(Model model,Principal loggedUser)
     {
         User tempUser = new User();
-        Users gettingUser = usersService.getUser(loggedUser.getName());
+        Users gettingUser = usersService.findByUsername(loggedUser.getName());
         tempUser.setPassword(gettingUser.getPassword());
-        System.out.println("password before populating : "+tempUser.getPassword());
         tempUser.setEmail(gettingUser.getEmail());
         tempUser.setPhoneNumber(gettingUser.getPhoneNumber());
         tempUser.setAddress(gettingUser.getAddress());
         model.addAttribute("user",tempUser);
-        return "updatestaff-page";
+        return "update-staff-page";
     }
 
 
-    @RequestMapping(path = "/saveUser",method = RequestMethod.POST)
+    @PostMapping("/saveUser")
     public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,Principal loggedUser)
     {
         if(bindingResult.hasErrors())
         {
             model.addAttribute("error",bindingResult.getFieldError("id"));
             model.addAttribute("user",user);
-            return "updatestaff-page";
+            return "update-staff-page";
         }
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         usersService.updateData(loggedUser.getName(),encodedPassword,user.getEmail(),user.getPhoneNumber(),user.getAddress());
@@ -86,15 +84,17 @@ public class StaffDataController {
 
 
     @GetMapping("/addItem")
-    public String addNewItem()
+    public String addNewItem(Model model)
     {
+        model.addAttribute("item",itemsDTO);
         return "item-form";
     }
 
+
     @PostMapping("/saveItem")
-    public String saveNewItem(@RequestParam("itemName") String itemName,@RequestParam("cost") String cost,@RequestParam("company") String company)
+    public String saveNewItem(@ModelAttribute("item")ItemsDTO itemsDTO)
     {
-        staffService.addNewItem(itemName,Integer.parseInt(cost),company);
+        itemsService.addNewItem(itemsConverter.dtoToEntity(itemsDTO));
         return "redirect:/successHandler";
     }
 

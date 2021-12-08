@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
 </head>
 <body>
-<h2 style="text-align: center;background: deepskyblue">Items ordered by <span th:text="${loggedUser}"></span></h2>
+<h2 style="text-align: center;background: deepskyblue">Items ordered by <span th:text="${currentUser}"></span></h2>
 
 <div style="width: 600px;height: auto;margin-left: auto;margin-right: auto">
 
@@ -28,7 +28,7 @@
             <td th:text="${item.getCompany()}"></td>
             <td><form th:action="@{/user/deleteOrder}" method="post">
                 <input type="text" th:value="${item.getItemId()}" name="id" id="id" hidden>
-                <input type="submit" value="delete order" th:onclick="window.confirm('Are you sure, you want to delete this item!')"/>
+                <input type="submit" value="delete order" th:onclick="return confirm('Are you sure, you want to delete this item!')"/>
             </form></td>
         </tr>
     </tbody>

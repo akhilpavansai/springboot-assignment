@@ -14,7 +14,10 @@
 <body>
 <div style="border: 3px solid deepskyblue;background: aquamarine;display: inline-block;padding: 50px 50px 80px 80px;margin-top: 8%">
     <div th:if="${param.user!=null}" style="color: green">
-        registered new user successful
+        Registered new user successful
+    </div>
+    <div th:if="${param.logout!=null}" style="color: green">
+        Logged out successfully
     </div>
 <h1>Login page</h1>
 <form th:action="@{/authenticateTheUser}" method="post">

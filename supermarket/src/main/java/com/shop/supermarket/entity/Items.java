@@ -1,12 +1,16 @@
 package com.shop.supermarket.entity;
 
-
+import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
 @Table(name = "items")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Items {
 
     @Id
@@ -31,29 +35,8 @@ public class Items {
             joinColumns = @JoinColumn(name = "item_id"),
             inverseJoinColumns = @JoinColumn(name = "username")
     )
+    @ToString.Exclude
     private List<Users> users;
-
-    public List<Users> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<Users> users) {
-        this.users = users;
-    }
-
-    public void addUser(Users theUser)
-    {
-        if (users==null)
-        {
-            users=new ArrayList<>();
-        }
-        users.add(theUser);
-    }
-
-    public Items()
-    {
-
-    }
 
     public Items(String itemName, int cost, String company) {
         this.itemName = itemName;
@@ -68,45 +51,13 @@ public class Items {
         this.company = company;
     }
 
-    public int getItemId() {
-        return itemId;
+    public void addUser(Users theUser)
+    {
+        if (users==null)
+        {
+            users=new ArrayList<>();
+        }
+        users.add(theUser);
     }
 
-    public void setItemId(int itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public int getCost() {
-        return cost;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    @Override
-    public String toString() {
-        return "Items{" +
-                "itemId=" + itemId +
-                ", itemName='" + itemName + '\'' +
-                ", cost=" + cost +
-                ", company=" + company +
-                '}';
-    }
 }

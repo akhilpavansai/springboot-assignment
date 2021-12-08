@@ -1,6 +1,7 @@
 package com.shop.supermarket.controller;
 
 
+import com.shop.supermarket.converter.ItemsConverter;
 import com.shop.supermarket.entity.User;
 import com.shop.supermarket.entity.Users;
 import com.shop.supermarket.service.ItemsService;
@@ -29,11 +30,15 @@ public class UsersDataController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private ItemsConverter itemsConverter;
+
+
     @GetMapping("/ordersList")
-    public String ordersList(Principal loggedUser,Model theModel)
+    public String ordersList(Principal loginUser,Model theModel)
     {
-        theModel.addAttribute("loggedUser",loggedUser.getName());
-        theModel.addAttribute("orderedItems",usersService.getItemsList(loggedUser.getName()));
+        theModel.addAttribute("currentUser",loginUser.getName());
+        theModel.addAttribute("orderedItems",usersService.getOrdersList(loginUser.getName()));
         return "orders-list";
     }
 
@@ -50,6 +55,7 @@ public class UsersDataController {
         usersService.addItem(loggedUser.getName(),Integer.parseInt(itemId));
         return new ModelAndView("redirect:/successHandler");
     }
+
     @PostMapping("/deleteOrder")
     public ModelAndView deleteItem(@RequestParam int id,Principal loggedUser)
     {
@@ -60,30 +66,29 @@ public class UsersDataController {
 
 
     @GetMapping("/updatePage")
-    public String updatePage(Model model,Principal loggedUser)
+    public String updatePage(Model model,Principal currentLoggedUser)
     {
         User tempUser = new User();
-        Users gettingUser = usersService.getUser(loggedUser.getName());
+        Users gettingUser = usersService.findByUsername(currentLoggedUser.getName());
         tempUser.setEmail(gettingUser.getEmail());
         tempUser.setPhoneNumber(gettingUser.getPhoneNumber());
         tempUser.setAddress(gettingUser.getAddress());
-        model.addAttribute("loggedUser",loggedUser.getName());
         model.addAttribute("user",tempUser);
         return "update-page";
     }
 
 
-    @RequestMapping(path = "/saveUser",method = RequestMethod.POST)
-    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,Principal loggedUser)
+    @PostMapping("/saveUser")
+    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,Principal presentUser)
     {
         if(bindingResult.hasErrors())
         {
-            model.addAttribute("loggedUser",loggedUser.getName());
+            model.addAttribute("loggedUser",presentUser.getName());
             model.addAttribute("user",user);
             return "update-page";
         }
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-        usersService.updateData(loggedUser.getName(),encodedPassword,user.getEmail(),user.getPhoneNumber(),user.getAddress());
+        usersService.updateData(presentUser.getName(),encodedPassword,user.getEmail(),user.getPhoneNumber(),user.getAddress());
         return "redirect:/successHandler";
     }
 

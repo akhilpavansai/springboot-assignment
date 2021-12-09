@@ -15,7 +15,9 @@ public interface UsersService {
 
     public Users findByUsername(String username);
 
-    public void updateData(String username,String password, String email,String phoneNumber,String address);
+    public void updateUser(String username, String password, String email, String phoneNumber, String address);
+
+    public void deleteUser(Users user);
 
     public void saveUser(Users theUser);
 

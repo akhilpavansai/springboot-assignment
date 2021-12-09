@@ -66,7 +66,14 @@
      position:absolute;
      top:0;
      right:0;">
-        <input class="btn btn-danger" type="submit" value="Sign Out"/>
+        <input class="btn btn-warning" type="submit" value="Sign Out"/>
+    </form>
+    <form name="logoutForm" th:action="@{/deleteUser}" method="post" style=" margin-top: 1px;
+     margin-right: 2px;
+     position:absolute;
+     top:0;
+     right:10%;">
+        <input class="btn btn-danger" type="submit" value="Delete Account" th:onclick="return confirm('Are you sure, you want to delete your account!')"/>
     </form>
 </div>
 </body>

@@ -18,10 +18,14 @@ public class ItemsServiceImpl implements ItemsService{
         itemsRepository=theItemsRepository;
     }
 
-
     @Override
     public List<Items> getAllItemsList() {
         return itemsRepository.findAll();
+    }
+
+    @Override
+    public Items getItemById(int id) {
+        return itemsRepository.getById(id);
     }
 
     @Override
@@ -32,5 +36,10 @@ public class ItemsServiceImpl implements ItemsService{
     @Override
     public void addNewItem(Items items) {
         itemsRepository.save(items);
+    }
+
+    @Override
+    public void updateItem(Items item) {
+        itemsRepository.updateItem(item);
     }
 }

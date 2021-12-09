@@ -38,6 +38,8 @@ public class StaffDataController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoderObject;
 
+    static final String SUCCESS_HANDLER = "redirect:/successHandler";
+
     @GetMapping("/stockList")
     public String stockList(Model theModel)
     {
@@ -75,8 +77,8 @@ public class StaffDataController {
         }
         Users tempUser = usersConverterObject.dtoToEntity(user);
         String encodedPassword = bCryptPasswordEncoderObject.encode(tempUser.getPassword());
-        usersServiceObject.updateData(loggedUser.getName(),encodedPassword,tempUser.getEmail(),tempUser.getPhoneNumber(),tempUser.getAddress());
-        return "redirect:/successHandler";
+        usersServiceObject.updateUser(loggedUser.getName(),encodedPassword,tempUser.getEmail(),tempUser.getPhoneNumber(),tempUser.getAddress());
+        return SUCCESS_HANDLER;
     }
 
 
@@ -91,7 +93,20 @@ public class StaffDataController {
     public String saveNewItem(@ModelAttribute("item")ItemsDTO itemsDTO)
     {
         itemsServiceObject.addNewItem(itemsConverterObject.dtoToEntity(itemsDTO));
-        return "redirect:/successHandler";
+        return SUCCESS_HANDLER;
     }
 
+    @PostMapping("/updateItem")
+    public String updateItem(@RequestParam("itemId") int itemId, Model model)
+    {
+        model.addAttribute("item",itemsConverterObject.entityToDto(itemsServiceObject.getItemById(itemId)));
+        return "item-update";
+    }
+
+    @PostMapping("/updateItemsData")
+    public String updateItemsData(@ModelAttribute("item")ItemsDTO itemsDTO)
+    {
+        itemsServiceObject.updateItem(itemsConverterObject.dtoToEntity(itemsDTO));
+        return SUCCESS_HANDLER;
+    }
 }

@@ -90,7 +90,7 @@ public class UsersDataController {
         }
         Users tempUser = usersConverter.dtoToEntity(user);
         String encodedPassword = bCryptPasswordEncoder.encode(tempUser.getPassword());
-        usersService.updateData(presentUser.getName(),encodedPassword,tempUser.getEmail(),tempUser.getPhoneNumber(),tempUser.getAddress());
+        usersService.updateUser(presentUser.getName(),encodedPassword,tempUser.getEmail(),tempUser.getPhoneNumber(),tempUser.getAddress());
         return "redirect:/successHandler";
     }
 

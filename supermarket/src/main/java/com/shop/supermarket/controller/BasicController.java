@@ -94,4 +94,11 @@ public class BasicController {
         return "redirect:/loginPage";
     }
 
+    @PostMapping("/deleteUser")
+    public String deleteUser(Principal loggedUser)
+    {
+        usersService.deleteUser(usersService.findByUsername(loggedUser.getName()));
+        return "redirect:/loginPage";
+    }
+
 }

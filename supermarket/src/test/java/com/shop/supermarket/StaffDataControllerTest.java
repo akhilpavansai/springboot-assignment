@@ -5,8 +5,10 @@ import com.shop.supermarket.controller.StaffDataController;
 import com.shop.supermarket.converter.ItemsConverter;
 import com.shop.supermarket.dto.ItemsDTO;
 import com.shop.supermarket.entity.Items;
+import com.shop.supermarket.entity.Users;
 import com.shop.supermarket.repository.ItemsRepository;
 import com.shop.supermarket.service.ItemsService;
+import com.shop.supermarket.service.UsersService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +37,9 @@ class StaffDataControllerTest {
 
     @MockBean
     private ItemsService itemsService;
+
+    @MockBean
+    private UsersService usersService;
 
     @MockBean
     private ItemsRepository itemsRepository;
@@ -73,5 +78,15 @@ class StaffDataControllerTest {
         doNothing().when(itemsService).deleteItemById(1);
         itemsService.deleteItemById(1);
         verify(itemsService,times(1)).deleteItemById(1);
+    }
+
+    @Test
+    void deleteStaffUser()
+    {
+        Users user = new Users("akhil","fun123","akhil@gmail.com","9701209751","hyderabad",(short)1);
+        doNothing().when(usersService).saveUser(user);
+        doNothing().when(usersService).deleteUser(user);
+        usersService.deleteUser(user);
+        verify(usersService,times(1)).deleteUser(user);
     }
 }

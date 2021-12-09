@@ -37,8 +37,13 @@ public class UsersServiceImpl implements UsersService{
     }
 
     @Override
-    public void updateData(String username,String password, String email,String phoneNumber,String address) {
+    public void updateUser(String username, String password, String email, String phoneNumber, String address) {
         usersRepository.updateData(username,password,email,phoneNumber,address);
+    }
+
+    @Override
+    public void deleteUser(Users user) {
+        usersRepository.delete(user);
     }
 
     @Override

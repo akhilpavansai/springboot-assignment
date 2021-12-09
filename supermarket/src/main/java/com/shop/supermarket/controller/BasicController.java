@@ -4,7 +4,9 @@ import com.shop.supermarket.converter.RolesConverter;
 import com.shop.supermarket.converter.UsersConverter;
 import com.shop.supermarket.dto.RolesDTO;
 import com.shop.supermarket.dto.UsersDTO;
+import com.shop.supermarket.entity.Roles;
 import com.shop.supermarket.entity.Users;
+import com.shop.supermarket.service.RolesService;
 import com.shop.supermarket.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +23,9 @@ import java.security.Principal;
 public class BasicController {
     @Autowired
     private UsersService usersService;
+
+    @Autowired
+    private RolesService rolesService;
 
     @Autowired
     private UsersConverter usersConverter;
@@ -90,7 +95,11 @@ public class BasicController {
         {
             return "prompt-page";
         }
-        usersService.saveRole(username,rolesConverter.dtoToEntity(role));
+        Users tempUser = usersService.findByUsername(username);
+        Roles tempRole = rolesService.getRolesById(role.getAuthority());
+        tempUser.addRole(tempRole);
+        tempRole.addUser(tempUser);
+        usersService.saveUser(tempUser);
         return "redirect:/loginPage";
     }
 

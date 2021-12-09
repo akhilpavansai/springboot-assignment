@@ -1,7 +1,6 @@
 package com.shop.supermarket.repository;
 
 import com.shop.supermarket.entity.Items;
-import com.shop.supermarket.entity.Roles;
 import com.shop.supermarket.entity.Users;
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
@@ -42,15 +41,6 @@ public class UsersRepositoryImpl {
         currentSession.saveOrUpdate(tempUser);
     }
 
-    @SuppressWarnings("unused")
-    @Transactional
-    public void saveRole(String user, Roles role) {
-        Session currentSession = entityManager.unwrap(Session.class);
-        Roles tempRole = currentSession.get(Roles.class,role.getAuthority());
-        Users tempUser = currentSession.get(Users.class,user);
-        tempUser.addRole(tempRole);
-        currentSession.saveOrUpdate(tempUser);
-    }
 
 
     @SuppressWarnings("unused")

@@ -1,7 +1,6 @@
 package com.shop.supermarket.service;
 
 import com.shop.supermarket.entity.Items;
-import com.shop.supermarket.entity.Roles;
 import com.shop.supermarket.entity.Users;
 
 import java.util.List;
@@ -22,5 +21,4 @@ public interface UsersService {
     //delete in CRUD
     public void deleteUser(Users user);
 
-    public void saveRole(String user, Roles role);
 }

@@ -1,6 +1,5 @@
 package com.shop.supermarket.service;
 
-import com.shop.supermarket.entity.Roles;
 import com.shop.supermarket.entity.Users;
 import com.shop.supermarket.entity.Items;
 import com.shop.supermarket.repository.UsersRepository;
@@ -39,11 +38,6 @@ public class UsersServiceImpl implements UsersService{
     @Override
     public void saveUser(Users theUser) {
         usersRepository.save(theUser);
-    }
-
-    @Override
-    public void saveRole(String user, Roles role) {
-        usersRepository.saveRole(user,role);
     }
 
     @Override

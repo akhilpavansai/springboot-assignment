@@ -1,5 +1,7 @@
 package com.shop.supermarket.service;
 
+import com.shop.supermarket.converter.UsersConverter;
+import com.shop.supermarket.dto.UsersDTO;
 import com.shop.supermarket.entity.Items;
 import com.shop.supermarket.entity.Roles;
 import com.shop.supermarket.entity.Users;
@@ -36,6 +38,9 @@ class UsersServiceImplTest {
     @MockBean
     RolesRepository rolesRepository;
 
+    @Autowired
+    UsersConverter usersConverter;
+
     @Test
     void saveUser() {
         Users user =  new Users("akhil","akhil123","akhil@gmail.com","9701209751","delhi",(short)1);
@@ -57,7 +62,8 @@ class UsersServiceImplTest {
 
     @Test
     void findByUsername() {
-        Users user = new Users("john","john123","john@gmail.com","9701209751","hyderabad",(short)1);
+        UsersDTO usersDTO = new UsersDTO("john","john123","john@gmail.com","9701209751","hyderabad",(short)1);
+        Users user = usersConverter.dtoToEntity(usersDTO);
         when(usersRepository.findByUsername("john")).thenReturn(user);
         assertEquals(user,usersService.findByUsername("john"));
     }
@@ -110,20 +116,13 @@ class UsersServiceImplTest {
     @Test
     void saveRoleByAddingUserToRole() {
         Users user = new Users("sham","sham123","sham@gmail.com","9701209751","delhi",(short)1);
-        Roles role = new Roles();
-        Roles tempRole = new Roles("ROLE_USER");
-        role.setAuthority(role.getAuthority());
-        role.addUser(null);
-        role.getUsers().add(user);
-        role.setUsers(new ArrayList<>());
+        Roles role = new Roles("ROLE_STAFF");
         role.addUser(user);
-        List<Roles> roles = new ArrayList<>();
-        roles.add(role);
+        user.addRole(role);
         when(usersRepository.findByUsername("sham")).thenReturn(user);
-        Users modifyingUser = usersService.findByUsername("sham");
-        modifyingUser.setRoles(roles);
-        usersService.saveUser(modifyingUser);
+        usersService.saveUser(user);
         assertEquals(user,usersRepository.findByUsername("sham"));
+        System.out.println(usersRepository.findByUsername("sham").getRoles().get(0));
     }
 
 }

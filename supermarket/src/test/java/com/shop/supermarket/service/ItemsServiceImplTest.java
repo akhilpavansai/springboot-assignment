@@ -26,6 +26,14 @@ class ItemsServiceImplTest {
     ItemsService itemsService;
 
     @Test
+    void saveItem() {
+        Items item = new Items(1,"kurkure",5,"kurkure");
+        when(itemsRepository.save(item)).thenReturn(item);
+        itemsService.saveItem(item);
+        verify(itemsRepository,times(1)).save(item);
+    }
+
+    @Test
     void getAllItemsList() {
         when(itemsRepository.findAll()).thenReturn(Stream.of(new Items(1,"kurkure",5,"kurkure"),new Items(2,"goodday",10,"britania")).collect(Collectors.toList()));
         assertEquals(2,itemsService.getAllItemsList().size());
@@ -38,18 +46,11 @@ class ItemsServiceImplTest {
         assertEquals(item,itemsService.getItemById(1));
     }
 
+
     @Test
     void deleteItemById() {
-        doNothing().when(itemsRepository).deleteById(1);
         itemsService.deleteItemById(1);
         verify(itemsRepository,times(1)).deleteById(1);
     }
 
-    @Test
-    void saveItem() {
-        Items item = new Items(1,"kurkure",5,"kurkure");
-        when(itemsRepository.save(item)).thenReturn(item);
-        itemsService.saveItem(item);
-        verify(itemsRepository,times(1)).save(item);
-    }
 }

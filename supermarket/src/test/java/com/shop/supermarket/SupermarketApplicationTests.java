@@ -2,10 +2,7 @@ package com.shop.supermarket;
 
 import com.shop.supermarket.converter.ItemsConverter;
 import com.shop.supermarket.converter.UsersConverter;
-import com.shop.supermarket.dto.ItemsDTO;
-import com.shop.supermarket.dto.UsersDTO;
 import com.shop.supermarket.entity.Items;
-import com.shop.supermarket.entity.Roles;
 import com.shop.supermarket.entity.Users;
 import com.shop.supermarket.repository.ItemsRepository;
 import com.shop.supermarket.repository.UsersRepository;
@@ -18,14 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 

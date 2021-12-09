@@ -52,12 +52,6 @@ public class UsersRepositoryImpl {
         currentSession.saveOrUpdate(tempUser);
     }
 
-    @SuppressWarnings("unused")
-    @Transactional
-    public void saveUser(Users user) {
-        Session currentSession = entityManager.unwrap(Session.class);
-        currentSession.save(user);
-    }
 
     @SuppressWarnings("unused")
     @Transactional

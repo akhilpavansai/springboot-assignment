@@ -4,6 +4,9 @@ package com.shop.supermarket.dto;
 import com.shop.supermarket.entity.Items;
 import com.shop.supermarket.entity.Roles;
 import lombok.*;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +20,11 @@ public class UsersDTO {
 
     private String username;
 
+    @NotEmpty(message = "password cannot be empty")
+    @Size(min = 4,message = "password should be of min length 4")
     private String password;
 
+    @NotEmpty(message = "email cannot be empty")
     private String email;
 
     private String phoneNumber;

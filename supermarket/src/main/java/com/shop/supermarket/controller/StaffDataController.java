@@ -92,7 +92,7 @@ public class StaffDataController {
     @PostMapping("/saveItem")
     public String saveNewItem(@ModelAttribute("item")ItemsDTO itemsDTO)
     {
-        itemsServiceObject.addNewItem(itemsConverterObject.dtoToEntity(itemsDTO));
+        itemsServiceObject.saveItem(itemsConverterObject.dtoToEntity(itemsDTO));
         return SUCCESS_HANDLER;
     }
 
@@ -103,10 +103,4 @@ public class StaffDataController {
         return "item-update";
     }
 
-    @PostMapping("/updateItemsData")
-    public String updateItemsData(@ModelAttribute("item")ItemsDTO itemsDTO)
-    {
-        itemsServiceObject.updateItem(itemsConverterObject.dtoToEntity(itemsDTO));
-        return SUCCESS_HANDLER;
-    }
 }

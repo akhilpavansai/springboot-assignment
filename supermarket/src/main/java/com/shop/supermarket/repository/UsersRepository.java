@@ -14,10 +14,6 @@ import java.util.List;
 public interface UsersRepository extends JpaRepository<Users,String> {
     public List<Items> getOrdersList(String username);
 
-    public void addItem(String username,int itemId);
-
-    public void deleteItem(String username,int itemId);
-
     public void updateData(String username,String password, String email,String phoneNumber,String address);
 
     public void saveUser(Users user);

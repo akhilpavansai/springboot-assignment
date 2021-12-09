@@ -34,12 +34,8 @@ public class ItemsServiceImpl implements ItemsService{
     }
 
     @Override
-    public void addNewItem(Items items) {
+    public void saveItem(Items items) {
         itemsRepository.save(items);
     }
 
-    @Override
-    public void updateItem(Items item) {
-        itemsRepository.updateItem(item);
-    }
 }

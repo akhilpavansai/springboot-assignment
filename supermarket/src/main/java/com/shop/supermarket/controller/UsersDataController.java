@@ -4,6 +4,7 @@ package com.shop.supermarket.controller;
 import com.shop.supermarket.converter.ItemsConverter;
 import com.shop.supermarket.converter.UsersConverter;
 import com.shop.supermarket.dto.UsersDTO;
+import com.shop.supermarket.entity.Items;
 import com.shop.supermarket.entity.Users;
 import com.shop.supermarket.service.ItemsService;
 import com.shop.supermarket.service.UsersService;
@@ -57,14 +58,20 @@ public class UsersDataController {
     @PostMapping("/orderItem")
     public ModelAndView orderItem(@RequestParam String itemId, Principal loggedUser)
     {
-        usersService.addItem(loggedUser.getName(),Integer.parseInt(itemId));
+        Users user = usersService.findByUsername(loggedUser.getName());
+        Items item = itemsService.getItemById(Integer.parseInt(itemId));
+        user.addItem(item);
+        itemsService.saveItem(item);
         return new ModelAndView("redirect:/successHandler");
     }
 
     @PostMapping("/deleteOrder")
     public ModelAndView deleteItem(@RequestParam int id,Principal loggedUser)
     {
-        usersService.deleteItem(loggedUser.getName(),id);
+        Users tempUser = usersService.findByUsername(loggedUser.getName());
+        Items tempItem = itemsService.getItemById(id);
+        tempUser.getItems().remove(tempItem);
+        itemsService.saveItem(tempItem);
         return new ModelAndView("redirect:/user/ordersList");
     }
 

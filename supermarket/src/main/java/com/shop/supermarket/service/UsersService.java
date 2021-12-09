@@ -7,19 +7,20 @@ import com.shop.supermarket.entity.Users;
 import java.util.List;
 
 public interface UsersService {
+    //create in CRUD
+    public void saveUser(Users theUser);
+
+    //read in CRUD
     public List<Items> getOrdersList(String username);
 
-    public void addItem(String username,int itemId);
-
-    public void deleteItem(String username,int itemId);
-
+    //read in CRUD
     public Users findByUsername(String username);
 
+    //update in CRUD
     public void updateUser(String username, String password, String email, String phoneNumber, String address);
 
+    //delete in CRUD
     public void deleteUser(Users user);
-
-    public void saveUser(Users theUser);
 
     public void saveRole(String user, Roles role);
 }

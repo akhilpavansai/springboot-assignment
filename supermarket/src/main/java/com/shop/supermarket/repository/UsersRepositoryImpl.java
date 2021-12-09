@@ -32,26 +32,6 @@ public class UsersRepositoryImpl {
 
     @SuppressWarnings("unused")
     @Transactional
-    public void addItem(String username, int itemId) {
-        Session currentSession = entityManager.unwrap(Session.class);
-        Items tempItem = currentSession.get(Items.class,itemId);
-        Users tempUser = currentSession.get(Users.class,username);
-        tempItem.addUser(tempUser);
-        currentSession.saveOrUpdate(tempItem);
-    }
-
-    @SuppressWarnings("unused")
-    @Transactional
-    public void deleteItem(String username, int itemId) {
-        Session currentSession = entityManager.unwrap(Session.class);
-        Users tempUser = currentSession.get(Users.class,username);
-        Items tempItem = currentSession.get(Items.class,itemId);
-        tempUser.getItems().remove(tempItem);
-        currentSession.saveOrUpdate(tempUser);
-    }
-
-    @SuppressWarnings("unused")
-    @Transactional
     public void updateData(String username, String password, String email, String phoneNumber, String address) {
         Session currentSession = entityManager.unwrap(Session.class);
         Users tempUser = currentSession.get(Users.class,username);

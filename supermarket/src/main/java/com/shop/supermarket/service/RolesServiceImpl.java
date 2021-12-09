@@ -15,4 +15,9 @@ public class RolesServiceImpl implements RolesService{
     public Roles getRolesById(String id) {
         return rolesRepository.getById(id);
     }
+
+    @Override
+    public void saveRole(Roles role) {
+        rolesRepository.save(role);
+    }
 }

@@ -3,7 +3,6 @@ package com.shop.supermarket;
 
 import com.shop.supermarket.controller.StaffDataController;
 import com.shop.supermarket.converter.ItemsConverter;
-import com.shop.supermarket.dto.ItemsDTO;
 import com.shop.supermarket.entity.Items;
 import com.shop.supermarket.entity.Users;
 import com.shop.supermarket.repository.ItemsRepository;
@@ -35,7 +34,7 @@ class StaffDataControllerTest {
 
     StaffDataController staffDataController;
 
-    @MockBean
+    @Autowired
     private ItemsService itemsService;
 
     @MockBean
@@ -73,13 +72,17 @@ class StaffDataControllerTest {
     @Test
     void deleteItemFromStockList()
     {
-        Items items = new Items(1,"green lays",5,"lays");
-        doNothing().when(itemsService).addNewItem(items);
-        doNothing().when(itemsService).deleteItemById(1);
         itemsService.deleteItemById(1);
-        verify(itemsService,times(1)).deleteItemById(1);
+        verify(itemsRepository,times(1)).deleteById(1);
     }
 
+    @Test
+    void saveItemToStockList()
+    {
+        Items item = new Items(1,"green lays",5,"lays");
+        itemsService.saveItem(item);
+        verify(itemsRepository,times(1)).save(item);
+    }
     @Test
     void deleteStaffUser()
     {
@@ -89,4 +92,5 @@ class StaffDataControllerTest {
         usersService.deleteUser(user);
         verify(usersService,times(1)).deleteUser(user);
     }
+
 }

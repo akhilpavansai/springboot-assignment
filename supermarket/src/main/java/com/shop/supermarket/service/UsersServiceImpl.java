@@ -27,16 +27,6 @@ public class UsersServiceImpl implements UsersService{
     }
 
     @Override
-    public void addItem(String username,int itemId) {
-        usersRepository.addItem(username,itemId);
-    }
-
-    @Override
-    public void deleteItem(String username, int itemId) {
-        usersRepository.deleteItem(username,itemId);
-    }
-
-    @Override
     public void updateUser(String username, String password, String email, String phoneNumber, String address) {
         usersRepository.updateData(username,password,email,phoneNumber,address);
     }

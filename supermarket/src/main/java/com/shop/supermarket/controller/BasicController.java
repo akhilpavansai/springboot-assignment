@@ -1,6 +1,6 @@
 package com.shop.supermarket.controller;
 
-import com.shop.supermarket.converter.RolesConverter;
+
 import com.shop.supermarket.converter.UsersConverter;
 import com.shop.supermarket.dto.RolesDTO;
 import com.shop.supermarket.dto.UsersDTO;
@@ -29,9 +29,6 @@ public class BasicController {
 
     @Autowired
     private UsersConverter usersConverter;
-
-    @Autowired
-    private RolesConverter rolesConverter;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;

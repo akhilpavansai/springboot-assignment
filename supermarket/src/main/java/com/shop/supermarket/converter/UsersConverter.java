@@ -25,14 +25,9 @@ public class UsersConverter {
         return users.stream().map(this::entityToDto).collect(Collectors.toList());
     }
 
-
     public Users dtoToEntity(UsersDTO usersDTO)
     {
        return modelMapper.map(usersDTO,Users.class);
     }
 
-    public List<Users> dtoToEntity(List<UsersDTO> usersDTO)
-    {
-        return usersDTO.stream().map(this::dtoToEntity).collect(Collectors.toList());
-    }
 }

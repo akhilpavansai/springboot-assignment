@@ -1,5 +1,7 @@
 package com.shop.supermarket.service;
 
+import com.shop.supermarket.converter.ItemsConverter;
+import com.shop.supermarket.dto.ItemsDTO;
 import com.shop.supermarket.entity.Items;
 import com.shop.supermarket.repository.ItemsRepository;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,6 +28,9 @@ class ItemsServiceImplTest {
 
     @Autowired
     ItemsService itemsService;
+
+    @Autowired
+    ItemsConverter itemsConverter;
 
     @Test
     void saveItem() {
@@ -51,6 +58,32 @@ class ItemsServiceImplTest {
     void deleteItemById() {
         itemsService.deleteItemById(1);
         verify(itemsRepository,times(1)).deleteById(1);
+    }
+
+    @Test
+    void testingItemsDTO()
+    {
+        ItemsDTO itemsDTO1 = new ItemsDTO();
+        ItemsDTO itemsDTO2 = new ItemsDTO(1,"lays",5,"lays india");
+        itemsDTO1.setItemId(itemsDTO2.getItemId());
+        itemsDTO1.setItemName(itemsDTO2.getItemName());
+        itemsDTO1.setCompany(itemsDTO2.getCompany());
+        itemsDTO1.setCost(itemsDTO2.getCost());
+        assertEquals("lays",itemsDTO2.getItemName());
+    }
+
+    @Test
+    void itemsConverterTestingEntityToDTO()
+    {
+        Items item1 = new Items(1,"lays",5,"lays india");
+        ItemsDTO itemsDTO1 = itemsConverter.entityToDto(item1);
+        Items item2 = new Items(2,"eclairs",5,"nestle");
+        List<Items> itemsList = new ArrayList<>();
+        itemsList.add(item1);
+        itemsList.add(item2);
+        List<ItemsDTO> itemsDTOList = itemsConverter.entityToDto(itemsList);
+        assertEquals(2,itemsDTOList.size());
+        assertEquals("nestle",item2.getCompany());
     }
 
 }

@@ -62,8 +62,16 @@ class UsersServiceImplTest {
 
     @Test
     void findByUsername() {
+        Users user = new Users("john","john123","john@gmail.com","9701209751","hyderabad",(short)1);
+        when(usersRepository.findByUsername("john")).thenReturn(user);
+        assertEquals(user,usersService.findByUsername("john"));
+    }
+
+    @Test
+    void checkingUsersDTO()
+    {
         UsersDTO finalUserDTO = new UsersDTO();
-        UsersDTO usersDTO = new UsersDTO("john","john123","john@gmail.com","9701209751","hyderabad",(short)1);
+        UsersDTO usersDTO = new UsersDTO(1,"john","john123","john@gmail.com","9701209751","hyderabad",(short)1);
         finalUserDTO.setUsername(usersDTO.getUsername());
         finalUserDTO.setUsername("mary");
         finalUserDTO.setPassword("mary123");
@@ -71,13 +79,9 @@ class UsersServiceImplTest {
         finalUserDTO.setPhoneNumber(usersDTO.getPhoneNumber());
         finalUserDTO.setEnabled(usersDTO.getEnabled());
         finalUserDTO.setAddress(usersDTO.getAddress());
-//        finalUserDTO.setRoles(usersDTO.getRoles());
-//        finalUserDTO.setItems(usersDTO.getItems());
-        Users user = usersConverter.dtoToEntity(usersDTO);
-        when(usersRepository.findByUsername("john")).thenReturn(user);
-        assertEquals(user,usersService.findByUsername("john"));
         assertEquals("mary123",finalUserDTO.getPassword());
     }
+
 
     @Test
     void updateUser() {
@@ -134,6 +138,19 @@ class UsersServiceImplTest {
         usersService.saveUser(user);
         assertEquals(user,usersRepository.findByUsername("sham"));
         System.out.println(usersRepository.findByUsername("sham").getRoles().get(0));
+    }
+
+    @Test
+    void testingUserConverterEntityToDTO()
+    {
+        Users user1 = new Users("akhil","akhil123","akhil@gmail.com","9701209751","hyderabad",(short)1);
+        Users user2 = new Users("nikhil","nikhil123","nikhil@gmail.com","9701209751","hyderabad",(short)1);
+        UsersDTO usersDTO1 = usersConverter.entityToDto(user1);
+        List<UsersDTO> usersDTOList = usersConverter.entityToDto(Stream.of(user1,user2).collect(Collectors.toList()));
+        Users user3 = usersConverter.dtoToEntity(usersDTO1);
+        assertEquals(2,usersDTOList.size());
+        assertEquals("akhil@gmail.com",usersDTO1.getEmail());
+        assertEquals("akhil@gmail.com",user3.getEmail());
     }
 
 }

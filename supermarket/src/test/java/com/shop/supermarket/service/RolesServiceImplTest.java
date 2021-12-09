@@ -1,5 +1,6 @@
 package com.shop.supermarket.service;
 
+import com.shop.supermarket.dto.RolesDTO;
 import com.shop.supermarket.entity.Roles;
 import com.shop.supermarket.repository.RolesRepository;
 import org.junit.jupiter.api.Test;
@@ -35,5 +36,14 @@ class RolesServiceImplTest {
         Roles role = new Roles("ROLE_STAFF");
         rolesService.saveRole(role);
         verify(rolesRepository,times(1)).save(role);
+    }
+
+    @Test
+    void testingRolesDTO()
+    {
+        RolesDTO role1 = new RolesDTO();
+        RolesDTO role2 = new RolesDTO("ROLE_STAFF");
+        role1.setAuthority("ROLE_USER");
+        assertEquals("ROLE_STAFF",role2.getAuthority());
     }
 }

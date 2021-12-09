@@ -71,6 +71,7 @@ class SupermarketApplicationTests {
 		assertEquals(usersService.findByUsername("john"),user);
 	}
 
+	//testing only for sonar cloud basic invocation of supermarket application main method
 	@Test
 	void testingMainMethodInSpringBootApplication()
 	{

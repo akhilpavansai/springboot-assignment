@@ -34,28 +34,28 @@ public class UsersDTO {
 
     private short enabled;
 
-    private List<Items> items;
+//    private List<Items> items;
+//
 
-
-    private List<Roles> roles;
-
-    public void addRole(Roles theRole)
-    {
-        if(roles==null)
-        {
-            roles=new ArrayList<>();
-        }
-        roles.add(theRole);
-    }
-
-    public void addItem(Items theItem)
-    {
-        if(items==null)
-        {
-            items=new ArrayList<>();
-        }
-        items.add(theItem);
-    }
+//    private List<Roles> roles;
+//
+//    public void addRole(Roles theRole)
+//    {
+//        if(roles==null)
+//        {
+//            roles=new ArrayList<>();
+//        }
+//        roles.add(theRole);
+//    }
+//
+//    public void addItem(Items theItem)
+//    {
+//        if(items==null)
+//        {
+//            items=new ArrayList<>();
+//        }
+//        items.add(theItem);
+//    }
 
 
     public UsersDTO(String username, String password, String email, String phoneNumber, String address, short enabled) {

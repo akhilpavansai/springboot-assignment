@@ -13,27 +13,26 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 public class RolesDTO {
 
     private String authority;
 
-    @ToString.Exclude
-    private List<Users> users;
 
-
-    public void addUser(Users theUser)
-    {
-        if(users==null)
-        {
-            users=new ArrayList<>();
-        }
-        users.add(theUser);
-    }
-
-    public RolesDTO(String authority)
-    {
-        this.authority=authority;
-    }
+//    private List<Users> users;
+//
+//
+//    public void addUser(Users theUser)
+//    {
+//        if(users==null)
+//        {
+//            users=new ArrayList<>();
+//        }
+//        users.add(theUser);
+//    }
+//
+//    public RolesDTO(String authority)
+//    {
+//        this.authority=authority;
+//    }
 
 }

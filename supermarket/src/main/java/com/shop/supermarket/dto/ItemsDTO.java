@@ -22,22 +22,22 @@ public class ItemsDTO {
 
     private String company;
 
-    private List<Users> users;
-
-    public ItemsDTO(String itemName, int cost, String company) {
-        this.itemName = itemName;
-        this.cost = cost;
-        this.company = company;
-    }
-
-
-    public void addUser(Users theUser)
-    {
-        if (users==null)
-        {
-            users=new ArrayList<>();
-        }
-        users.add(theUser);
-    }
+//    private List<Users> users;
+//
+//    public ItemsDTO(String itemName, int cost, String company) {
+//        this.itemName = itemName;
+//        this.cost = cost;
+//        this.company = company;
+//    }
+//
+//
+//    public void addUser(Users theUser)
+//    {
+//        if (users==null)
+//        {
+//            users=new ArrayList<>();
+//        }
+//        users.add(theUser);
+//    }
 
 }

@@ -62,10 +62,21 @@ class UsersServiceImplTest {
 
     @Test
     void findByUsername() {
+        UsersDTO finalUserDTO = new UsersDTO();
         UsersDTO usersDTO = new UsersDTO("john","john123","john@gmail.com","9701209751","hyderabad",(short)1);
+        finalUserDTO.setUsername(usersDTO.getUsername());
+        finalUserDTO.setUsername("mary");
+        finalUserDTO.setPassword("mary123");
+        finalUserDTO.setEmail(usersDTO.getEmail());
+        finalUserDTO.setPhoneNumber(usersDTO.getPhoneNumber());
+        finalUserDTO.setEnabled(usersDTO.getEnabled());
+        finalUserDTO.setAddress(usersDTO.getAddress());
+//        finalUserDTO.setRoles(usersDTO.getRoles());
+//        finalUserDTO.setItems(usersDTO.getItems());
         Users user = usersConverter.dtoToEntity(usersDTO);
         when(usersRepository.findByUsername("john")).thenReturn(user);
         assertEquals(user,usersService.findByUsername("john"));
+        assertEquals("mary123",finalUserDTO.getPassword());
     }
 
     @Test

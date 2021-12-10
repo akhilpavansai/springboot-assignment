@@ -1,14 +1,12 @@
 package com.shop.supermarket;
 
 import com.shop.supermarket.controller.BasicController;
-
 import org.junit.jupiter.api.Test;
-
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -53,5 +51,22 @@ class BasicControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(view().name("role-page"));
     }
+
+    @Test
+    @WithMockUser(roles = "ROLE_STAFF")
+    void registerPageReturnViewForRegistration() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/registerPage"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(view().name("register"));
+    }
+
+    @Test
+    @WithMockUser(roles = "ROLE_USER")
+    void registerPageReturnViewForRegistrationForUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/registerPage"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(view().name("register"));
+    }
+
 
 }

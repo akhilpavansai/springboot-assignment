@@ -18,30 +18,30 @@
 <br/>
 <form th:object="${user}" th:action="@{/saveNewUser}" method="post">
     <div style="width: 600px;height: auto;margin-left: auto;margin-right: auto">
-        <div class="alert alert-danger error" th:if="${#fields.hasErrors('*')}">
-            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
-        </div>
+<!--        <div class="alert alert-danger error" th:if="${#fields.hasErrors('*')}">-->
+<!--            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>-->
+<!--        </div>-->
     <table class="table table-dark">
         <tbody>
         <tr>
             <td><label>Username<span style="color: red">*</span> : </label></td>
-            <td><input type="text" th:field="*{username}" required name="username" id="username" placeholder="Enter username"/></td>
+            <td><input type="text"  required name="username" id="username" placeholder="Enter username"/></td>
         </tr>
         <tr>
             <td><label>User password<span style="color: red">*</span> : </label></td>
-            <td><input type="password" th:field="*{password}" minlength="4" name="password" required id="password" placeholder="Enter password"/></td>
+            <td><input type="password"  minlength="4" name="password" required id="password" placeholder="Enter password"/></td>
         </tr>
         <tr>
             <td><label>User email<span style="color: red">*</span> :</label></td>
-            <td><input type="email" required th:field="*{email}" placeholder="Enter email id"></td>
+            <td><input type="email" required name="email" id="email" placeholder="Enter email id"></td>
         </tr>
         <tr>
             <td><label>User phoneNumber :</label></td>
-            <td><input type="text"  th:field="*{phoneNumber}" placeholder="Enter phone number"></td>
+            <td><input type="text" name="phoneNumber" id="phoneNumber" placeholder="Enter phone number"></td>
         </tr>
         <tr>
             <td><label>User address :</label></td>
-            <td><input type="text"  th:field="*{address}" placeholder="Enter address"></td>
+            <td><input type="text" name="address" id="address" placeholder="Enter address"></td>
         </tr>
         <tr>
             <td><input type="submit" value="submit" /></td>

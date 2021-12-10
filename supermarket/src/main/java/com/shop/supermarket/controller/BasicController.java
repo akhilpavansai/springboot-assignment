@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -42,7 +41,7 @@ public class BasicController {
     @GetMapping("/successHandler")
     public String successHandler(Principal loggedUser, Model theModel)
     {
-        theModel.addAttribute("loggedUser",loggedUser);
+        theModel.addAttribute("loggedUser",loggedUser.getName());
         return "home";
     }
 
@@ -53,23 +52,17 @@ public class BasicController {
     }
 
     @GetMapping("/registerPage")
-    public String registerPage(Model theModel)
+    public String registerPage()
     {
-        theModel.addAttribute("user",new Users());
         return "register";
     }
 
     @PostMapping("/saveNewUser")
-    public String registerPage(@Valid @ModelAttribute("user") UsersDTO user, BindingResult bindingResult, Model model, Principal loggedUser)
+    public String registerPage(@Valid @ModelAttribute("user") UsersDTO user, Model model)
     {
         if (usersService.findByUsername(user.getUsername())!=null)
         {
             return "duplicate-user";
-        }
-        if(bindingResult.hasErrors())
-        {
-            model.addAttribute("user",user);
-            return "redirect:/registerPage";
         }
         user.setEnabled((short) 1);
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());

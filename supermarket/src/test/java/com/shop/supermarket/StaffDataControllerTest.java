@@ -104,13 +104,5 @@ class StaffDataControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/successHandler"));
     }
 
-    @Test
-    void updateNewItemTesting() throws Exception {
-        Items item  = new Items(1, "bluelays",5,"laysindia");
-        when(itemsRepository.getById(1)).thenReturn(item);
-        mockMvc.perform(MockMvcRequestBuilders.post("/staff/updateItem").param("itemId","1"))
-                .andExpect((MockMvcResultMatchers.model()).attribute("item",itemsConverter.entityToDto(itemsService.getItemById(1))))
-                .andExpect(MockMvcResultMatchers.view().name("item-update"));
-    }
 
 }

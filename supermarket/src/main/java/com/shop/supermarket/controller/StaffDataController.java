@@ -26,11 +26,21 @@ public class StaffDataController {
     @Autowired
     private UsersService usersServiceObject;
 
-    @Autowired
     private ItemsService itemsServiceObject;
 
     @Autowired
+    public void setItemsServiceObject(ItemsService itemsServiceObject)
+    {
+        this.itemsServiceObject=itemsServiceObject;
+    }
+
     private ItemsConverter itemsConverterObject;
+
+    @Autowired
+    public void setItemsConverterObject(ItemsConverter itemsConverterObject)
+    {
+        this.itemsConverterObject=itemsConverterObject;
+    }
 
     @Autowired
     private UsersConverter usersConverterObject;

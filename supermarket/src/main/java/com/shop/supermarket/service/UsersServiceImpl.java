@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class UsersServiceImpl implements UsersService{
 
-    private UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
 
     @Autowired
     public UsersServiceImpl(UsersRepository theUsersRepository)
@@ -42,7 +42,6 @@ public class UsersServiceImpl implements UsersService{
     public void updateUser(String username, String password, String email, String phoneNumber, String address) {
         usersRepository.updateData(username,password,email,phoneNumber,address);
     }
-
     //delete in CRUD
     @Override
     public void deleteUser(Users user) {

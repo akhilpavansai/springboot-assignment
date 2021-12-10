@@ -52,6 +52,7 @@ class BasicControllerTest {
                 .andExpect(view().name("role-page"));
     }
 
+
     @Test
     @WithMockUser(roles = "ROLE_STAFF")
     void registerPageReturnViewForRegistration() throws Exception {
